@@ -10,13 +10,12 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 let data=[];
 
 router.get('/',  (req,res) => { 
-    let data = '';
+    let data1 = '';
     req.on('data', chunk => {
-        data += chunk;
+        data1 += chunk;
       });
     req.on('end', () => {
         var req_json = JSON.parse(data);
-
         console.log(req_json);
         res.end();
       })
@@ -44,7 +43,7 @@ router.put('/:id', jsonParser,(req,res) =>
 
 });
 
-router.post('/', jsonParser, (req,res) =>
+router.post('/', (req,res) =>
 {
     console.log("post request");
     
