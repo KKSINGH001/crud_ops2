@@ -10,26 +10,45 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 let data=[];
 let data1 = '';
 
-const parser= ()=>{
-    
-    req.on('data', chunk => {
-        data1 += chunk;
-      });
-    req.on('end', () => {
-        var req_json = JSON.parse(data1);
-        console.log(req_json);
-        res.end();
-      })
-};
+router.use(function( req, res, next ) {
+    var data = '';
+    req.on('data', function( chunk ) {
+      data += chunk;
+    });
+    req.on('end', function() {
+      req.rawBody = data;
+      console.log( 'on end: ', data )
+      if (data && data.indexOf('{') > -1 ) {
+        req.body = JSON.parse(data);
+      }
+      next();
+    });
+  });
 
-router.get('/', parser, (req,res) => { 
+
+// const cb = function( req, res, next ) {
+//     var data = '';
+//     req.on('data', function( chunk ) {
+//       data += chunk;
+//     });
+//     req.on('end', function() {
+//       req.rawBody = data;
+//       console.log( 'on end: ', data )
+//       if (data && data.indexOf('{') > -1 ) {
+//         req.body = JSON.parse(data);
+//       }
+//       next();
+//     });
+//   }
+
+router.get('/', (req,res) => { 
     
     console.log("Get request....");
     console.log(req);
     res.send(data);
 });
 
-router.put('/:id', jsonParser,(req,res) =>
+router.put('/:id',(req,res) =>
 {
     id=req.params.id;
     const index = data.findIndex((x)=>{return(x.id==id)});
