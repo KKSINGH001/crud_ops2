@@ -8,9 +8,10 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 // const { json } = require('body-parser');
 
 let data=[];
+let data1 = '';
 
-router.get('/',  (req,res) => { 
-    let data1 = '';
+const parser= ()=>{
+    
     req.on('data', chunk => {
         data1 += chunk;
       });
@@ -19,6 +20,10 @@ router.get('/',  (req,res) => {
         console.log(req_json);
         res.end();
       })
+};
+
+router.get('/', parser, (req,res) => { 
+    
     console.log("Get request....");
     console.log(req);
     res.send(data);
