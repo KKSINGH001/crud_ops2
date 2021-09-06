@@ -16,7 +16,7 @@ const parser= ()=>{
         data1 += chunk;
       });
     req.on('end', () => {
-        var req_json = JSON.parse(data);
+        var req_json = JSON.parse(data1);
         console.log(req_json);
         res.end();
       })
